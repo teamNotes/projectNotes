@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>reg_window</class>
+ <widget class="QDialog" name="reg_window">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>366</width>
+    <height>198</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>-1</x>
+     <y>-1</y>
+     <width>271</width>
+     <height>171</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="1">
+     <widget class="QLabel" name="labelWelcome">
+      <property name="text">
+       <string>Register Yourself</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_Name">
+      <property name="text">
+       <string>Name:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_Pass">
+      <property name="text">
+       <string>Password:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="confirmLineEdit"/>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="passwordLineEdit"/>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_Confirm">
+      <property name="text">
+       <string>Confirm:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="nameLineEdit"/>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="registerPushButton">
+      <property name="text">
+       <string>Register</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>nameLineEdit</tabstop>
+  <tabstop>passwordLineEdit</tabstop>
+  <tabstop>confirmLineEdit</tabstop>
+  <tabstop>registerPushButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
