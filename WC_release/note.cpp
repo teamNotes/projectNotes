@@ -12,3 +12,8 @@ Note::~Note()
 {
     delete ui;
 }
+
+Note::~Note()
+{
+    delete ui;
+}
