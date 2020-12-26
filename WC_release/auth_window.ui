@@ -180,6 +180,46 @@ border-radius: 45px;</string>
     <string>Вход</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label_Name_2">
+   <property name="geometry">
+    <rect>
+     <x>530</x>
+     <y>220</y>
+     <width>181</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: italic 8pt &quot;Montserrat&quot;;
+background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:1, stop:0.741573 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));</string>
+   </property>
+   <property name="text">
+    <string>Логин</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Name_3">
+   <property name="geometry">
+    <rect>
+     <x>530</x>
+     <y>270</y>
+     <width>181</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: italic 8pt &quot;Montserrat&quot;;
+background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:1, stop:0.741573 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));</string>
+   </property>
+   <property name="text">
+    <string>Пароль</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
   <zorder>label_Password</zorder>
   <zorder>label_Name</zorder>
   <zorder>label</zorder>
@@ -187,6 +227,8 @@ border-radius: 45px;</string>
   <zorder>loginPushButton</zorder>
   <zorder>lineEdit</zorder>
   <zorder>lineEdit_2</zorder>
+  <zorder>label_Name_2</zorder>
+  <zorder>label_Name_3</zorder>
  </widget>
  <tabstops>
   <tabstop>loginPushButton</tabstop>

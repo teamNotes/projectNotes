@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1920</width>
-    <height>1080</height>
+    <width>656</width>
+    <height>768</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,57 +21,65 @@
    <string notr="true">background-color: rgb(120, 65, 81);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPlainTextEdit" name="plainTextEdit_5">
+   <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>-4</x>
-      <y>350</y>
-      <width>251</width>
-      <height>281</height>
+      <x>230</x>
+      <y>20</y>
+      <width>191</width>
+      <height>22</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    <property name="text">
+     <string>PushButton</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="plainTextEdit_6">
+   <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>258</x>
-      <y>350</y>
-      <width>251</width>
-      <height>281</height>
+      <x>10</x>
+      <y>49</y>
+      <width>74</width>
+      <height>641</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
-    </property>
+    <layout class="QVBoxLayout" name="mainLayout2">
+     <item>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="text">
+        <string>CheckBox</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>710</y>
-      <width>201</width>
+      <x>10</x>
+      <y>20</y>
+      <width>211</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>Создать новую заметку</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="plainTextEdit_3">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>350</y>
-      <width>371</width>
-      <height>281</height>
+      <x>80</x>
+      <y>50</y>
+      <width>551</width>
+      <height>641</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
-    </property>
+    <layout class="QVBoxLayout" name="mainLayout">
+     <item>
+      <widget class="QLineEdit" name="lineEdit"/>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
