@@ -3,7 +3,8 @@
 #include "auth_window.h"
 #include "reg_window.h"
 #include <QtDebug>
-
+#include <QWidget>
+#include <QLayout>
 
 MainWindow::MainWindow(QDialog *parent) :                                               //реализация конструктора главного окна
     QMainWindow(parent),                                                                //список инициализации
@@ -26,6 +27,8 @@ MainWindow::MainWindow(QDialog *parent) :                                       
         qDebug() << "Failed to connect DB";
     }
 
+
+
     QSqlQuery query;
 
     db_input = "CREATE TABLE userlist ( "
@@ -41,7 +44,7 @@ MainWindow::MainWindow(QDialog *parent) :                                       
             qDebug() << "Unable to create a table" << query.lastError()/* << " : " << query.lastQuery()*/;
     }
 
-
+    QGridLayout *digitLayout = new QGridLayout(this);
     ui_Main->setupUi(this);                                                             //установка интерфейса главного окна
 
     //connect(&ui_Auth,SIGNAL(destroyed()), this, SLOT(AuthAquired()));
@@ -214,4 +217,18 @@ bool MainWindow::connectDB()
 void MainWindow::wipeDB()
 {
     mw_db.removeDatabase("authorisation");
+}
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    QWidget* w=new QWidget();
+    QVBoxLayout *mainLayout = new QVBoxLayout();
+    ui_Main->mainLayout->addWidget(new QLineEdit);
+    w->setLayout(mainLayout);
+
+    QWidget* w2=new QWidget();
+    QVBoxLayout *mainLayout2 = new QVBoxLayout();
+    ui_Main->mainLayout2->addWidget(new QCheckBox);
+    w2->setLayout(mainLayout2);
 }
