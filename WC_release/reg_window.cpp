@@ -6,7 +6,17 @@ reg_window::reg_window(QDialog *parent) :                               //реа
     QDialog(parent),                                                    //список инициализации
     ui(new Ui::reg_window)
 {
-    ui->setupUi(this);                                                  //установка интерфейса окна регистрации
+    ui->setupUi(this);
+    ui->registerPushButton->setText("Регистрация");
+    ui->registerPushButton->setStyleSheet("QPushButton {color: rgb(120, 65, 81); background-color: white; border-width: 1px; font: italic 12pt \"Montserrat\"; border-color: white; border-radius: 45px;}");
+    ui->registerPushButton->setFixedHeight(90);
+    ui->registerPushButton->setFixedWidth(230);
+    ui->nameLineEdit->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
+    ui->passwordLineEdit->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
+    ui->confirmLineEdit->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
+    ui->label_Name->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
+    ui->label_Pass->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
+    ui->label_Confirm->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
 }
 
 reg_window::~reg_window()                                               //реализация деструктора
