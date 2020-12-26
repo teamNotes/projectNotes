@@ -3,6 +3,7 @@
 
 #include <QDialog>
 
+#include <QObject>
 namespace Ui {
 class reg_window;
 }
@@ -12,22 +13,20 @@ class reg_window : public QDialog
     Q_OBJECT
 
 public:
-    explicit reg_window(QDialog *parent = nullptr);
+    explicit reg_window(QWidget *parent = nullptr);
     ~reg_window();
     QString getName();
     QString getPass();
     bool checkPass();
+    void setErrorText(QString msg);
 
 signals:
     void register_button_clicked2();
 
 private slots:
     void on_nameLineEdit_textEdited(const QString &arg1);
-
     void on_passwordLineEdit_textEdited(const QString &arg1);
-
     void on_confirmLineEdit_textEdited(const QString &arg1);
-
     void on_registerPushButton_clicked();
 
 private:

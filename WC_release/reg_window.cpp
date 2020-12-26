@@ -1,12 +1,21 @@
 #include "reg_window.h"
 #include "ui_reg_window.h"
 #include <QtDebug>
+#include <QPoint>
+#include <QDesktopWidget>
 
-reg_window::reg_window(QDialog *parent) :                               //реализация конструктора окна регистрации
+reg_window::reg_window(QWidget *parent) :                               //реализация конструктора окна регистрации
     QDialog(parent),                                                    //список инициализации
     ui(new Ui::reg_window)
 {
     ui->setupUi(this);
+
+    QRect desktopRect = QApplication::desktop()->availableGeometry(this);
+    QPoint center = desktopRect.center();
+
+    move(center.x()-width()*0.5, center.y()-height()*0.5);
+
+
     ui->registerPushButton->setText("Регистрация");
     ui->registerPushButton->setStyleSheet("QPushButton {color: rgb(120, 65, 81); background-color: white; border-width: 1px; font: italic 12pt \"Montserrat\"; border-color: white; border-radius: 45px;}");
     ui->registerPushButton->setFixedHeight(90);
@@ -26,6 +35,25 @@ reg_window::~reg_window()                                               //реа
 
 void reg_window::on_registerPushButton_clicked()                        //реализация слота нажатия кнопки регистрации
 {
+    // Проверяем, что имя пользователя и пароль введены
+    if(ui->nameLineEdit->text().isEmpty())
+    {
+        ui->nameLineEdit->setFocus(Qt::OtherFocusReason);
+        ui->label_Error->setText(tr("Введите имя пользователя"));
+        return;
+    }
+    if(ui->passwordLineEdit->text().isEmpty())
+    {
+        ui->passwordLineEdit->setFocus(Qt::OtherFocusReason);
+        ui->label_Error->setText(tr("Введите пароль"));
+        return;
+    }
+    if(!checkPass())
+    {
+        ui->passwordLineEdit->setFocus(Qt::OtherFocusReason);
+        ui->label_Error->setText(tr("Пароли не совпадают"));
+        return;
+    }
     emit register_button_clicked2();
 }
 
@@ -57,5 +85,10 @@ QString reg_window::getPass()
 bool reg_window::checkPass()
 {
     return (m_confirmation == m_userPass);
+}
+
+void reg_window::setErrorText(QString msg)
+{
+    ui->label_Error->setText(msg);
 }
 
