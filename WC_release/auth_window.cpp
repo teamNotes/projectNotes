@@ -1,11 +1,18 @@
 #include "auth_window.h"
 #include "ui_auth_window.h"
+#include <QPoint>
+#include <QDesktopWidget>
 
-auth_window::auth_window(QDialog *parent) :
+auth_window::auth_window(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::auth_window)
 {
     ui->setupUi(this);
+    QRect desktopRect = QApplication::desktop()->availableGeometry(this);
+    QPoint center = desktopRect.center();
+
+    move(center.x()-width()*0.5, center.y()-height()*0.5);
+
     ui->loginPushButton->setFixedHeight(90);
     ui->loginPushButton->setFixedWidth(230);
     ui->loginPushButton->setStyleSheet("QPushButton {color: rgb(120, 65, 81); background-color: white; border-width: 1px; font: italic 12pt \"Montserrat\"; border-color: white; border-radius: 45px;}");
@@ -13,8 +20,8 @@ auth_window::auth_window(QDialog *parent) :
     ui->registerPushButton_2->setStyleSheet("QPushButton {color: white; background-color: rgba(255, 255, 255, 0); border-width: 1px; font: italic 12pt \"Montserrat\"; border-style: solid;  border-color: white; border-radius: 45px;}");
     ui->registerPushButton_2->setFixedHeight(90);
     ui->registerPushButton_2->setFixedWidth(230);
-    ui->lineEdit->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
-    ui->lineEdit_2->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
+    ui->nameLineEdit->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
+    ui->passwordLineEdit->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
     ui->label_Name_2->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
     ui->label_Name_3->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
 
@@ -25,18 +32,23 @@ auth_window::~auth_window()
     delete ui;
 }
 
-void auth_window::on_lineEdit_textEdited(const QString &arg1)
-{
-    auth_window::m_username = arg1;
-}
-
-void auth_window::on_lineEdit_2_textEdited(const QString &arg1)
-{
-    auth_window::m_userpass = arg1;
-}
-
 void auth_window::on_loginPushButton_clicked()
 {
+    // Проверяем, что имя пользователя и пароль введены
+    if(ui->nameLineEdit->text().isEmpty())
+    {
+        ui->nameLineEdit->setFocus(Qt::OtherFocusReason);
+        ui->label_Error->setText(tr("Введите имя пользователя"));
+        return;
+    }
+    if(ui->passwordLineEdit->text().isEmpty())
+    {
+        ui->passwordLineEdit->setFocus(Qt::OtherFocusReason);
+        ui->label_Error->setText(tr("Введите пароль"));
+        return;
+    }
+    m_username = ui->nameLineEdit->text();
+    m_userpass = ui->passwordLineEdit->text();
     emit login_button_clicked();
 }
 
@@ -53,4 +65,9 @@ QString auth_window::getLogin()
 QString auth_window::getPass()
 {
     return auth_window::m_userpass;
+}
+
+void auth_window::setErrorMessage(QString msg)
+{
+    ui->label_Error->setText(msg);
 }

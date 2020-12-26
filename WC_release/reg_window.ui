@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1210</width>
-    <height>512</height>
+    <width>1080</width>
+    <height>768</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1080</width>
+    <height>768</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1080</width>
+    <height>768</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>notes</string>
@@ -24,8 +36,8 @@
   <widget class="QLabel" name="label_Name">
    <property name="geometry">
     <rect>
-     <x>540</x>
-     <y>200</y>
+     <x>470</x>
+     <y>270</y>
      <width>181</width>
      <height>20</height>
     </rect>
@@ -44,8 +56,8 @@ background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:
   <widget class="QLabel" name="label_Pass">
    <property name="geometry">
     <rect>
-     <x>530</x>
-     <y>260</y>
+     <x>460</x>
+     <y>330</y>
      <width>201</width>
      <height>20</height>
     </rect>
@@ -64,8 +76,8 @@ background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:
   <widget class="QLabel" name="label_Confirm">
    <property name="geometry">
     <rect>
-     <x>540</x>
-     <y>320</y>
+     <x>470</x>
+     <y>390</y>
      <width>181</width>
      <height>20</height>
     </rect>
@@ -84,8 +96,8 @@ background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:
   <widget class="QLabel" name="label_Name_2">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>160</y>
+     <x>400</x>
+     <y>230</y>
      <width>51</width>
      <height>51</height>
     </rect>
@@ -106,8 +118,8 @@ background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:
   <widget class="QLabel" name="label_Pass_2">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>220</y>
+     <x>400</x>
+     <y>290</y>
      <width>51</width>
      <height>51</height>
     </rect>
@@ -125,8 +137,8 @@ background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:
   <widget class="QLabel" name="label_Confirm_2">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>280</y>
+     <x>400</x>
+     <y>350</y>
      <width>51</width>
      <height>51</height>
     </rect>
@@ -154,10 +166,10 @@ background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>315</x>
-     <y>-50</y>
-     <width>631</width>
-     <height>331</height>
+     <x>290</x>
+     <y>70</y>
+     <width>571</width>
+     <height>241</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -176,8 +188,8 @@ background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:
   <widget class="QLineEdit" name="passwordLineEdit">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>220</y>
+     <x>450</x>
+     <y>290</y>
      <width>221</width>
      <height>41</height>
     </rect>
@@ -193,8 +205,8 @@ background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:
   <widget class="QLineEdit" name="nameLineEdit">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>160</y>
+     <x>450</x>
+     <y>230</y>
      <width>221</width>
      <height>41</height>
     </rect>
@@ -210,8 +222,8 @@ background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:
   <widget class="QLineEdit" name="confirmLineEdit">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>280</y>
+     <x>450</x>
+     <y>350</y>
      <width>220</width>
      <height>41</height>
     </rect>
@@ -227,8 +239,8 @@ background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:
   <widget class="QPushButton" name="registerPushButton">
    <property name="geometry">
     <rect>
-     <x>510</x>
-     <y>370</y>
+     <x>440</x>
+     <y>440</y>
      <width>201</width>
      <height>91</height>
     </rect>
@@ -244,6 +256,25 @@ border-radius: 45px;</string>
     <string>Зарегистрироваться</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label_Error">
+   <property name="geometry">
+    <rect>
+     <x>-40</x>
+     <y>540</y>
+     <width>1141</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:red;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
   <zorder>confirmLineEdit</zorder>
   <zorder>registerPushButton</zorder>
   <zorder>label</zorder>
@@ -255,6 +286,7 @@ border-radius: 45px;</string>
   <zorder>label_Pass_2</zorder>
   <zorder>passwordLineEdit</zorder>
   <zorder>nameLineEdit</zorder>
+  <zorder>label_Error</zorder>
  </widget>
  <tabstops>
   <tabstop>nameLineEdit</tabstop>
