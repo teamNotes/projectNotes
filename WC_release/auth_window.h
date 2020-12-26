@@ -30,6 +30,8 @@ private slots:
 
     void on_registerPushButton_2_clicked();
 
+    void on_lineEdit_2_cursorPositionChanged(int arg1, int arg2);
+
 private:
     Ui::auth_window *ui;
     QString m_username;
