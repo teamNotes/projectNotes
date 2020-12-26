@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/resource">
+        <file>images/иконки_Log_pas-02.png</file>
+        <file>images/иконки_Log_pas2-02.png</file>
+        <file>images/иконки_Log_pas2-03.png</file>
+        <file>images/иконки_Log_pas-03.png</file>
+        <file>images/Кнопки-05.png</file>
+        <file>images/Кнопки-06.png</file>
+        <file>images/писанина2-04.png</file>
+        <file>images/писанина-04.png</file>
+        <file>images/регистрация-06.png</file>
+        <file>images/тень-05.png</file>
+        <file>images/линия-05.png</file>
+        <file>images/линия2-05.png</file>
+        <file>images/нов_линия-05.png</file>
+        <file>images/повтор-09.png</file>
+        <file>images/заголовок-04.png</file>
+        <file>images/заголовок-10.png</file>
+    </qresource>
+</RCC>
