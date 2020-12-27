@@ -9,7 +9,7 @@
 #include <QMessageBox>
 #include <QSqlError>
 #include <QSqlQuery>
-
+#include <QDesktopWidget>
 
 
 MainWindow::MainWindow(QWidget *parent) :               //реализация конструктора главного окна
@@ -109,7 +109,7 @@ void MainWindow::authorizeUser()
    QString upass       = "";
    int xPos            = 0;
    int yPos            = 0;
-   int width           = 0;
+   int width1           = 0;
    int length          = 0;
 
     QStringList tables = db.tables();
@@ -152,15 +152,26 @@ void MainWindow::authorizeUser()
       m_loginSuccesfull = true;
       xPos    = query.value("xpos").toInt();
       yPos    = query.value("ypos").toInt();
-      width   = query.value("width").toInt();
+      width1   = query.value("width").toInt();
       length  = query.value("length").toInt();
       username = uname;
       userpass = upass;
       on_calendarWidget_selectionChanged();
       ui_Auth->close();
       ui_Reg->close();
-      this->setGeometry(xPos,yPos,width, length);
+      this->setGeometry(xPos,yPos,width1, length);
+
+      ui_Auth->hide();
+      QDesktopWidget desktop;
+      QRect rect = desktop.availableGeometry(this);
+      QPoint center = rect.center();
+      int x = center.x() - (width()/2);
+      int y = center.y() - (height()/2);
+      center.setX(x);
+      center.setY(y);
+      move(center);
       this->show();
+
       ui->progressBar->setAlignment(Qt::AlignCenter);
       ui->progressBar->setStyleSheet("QProgressBar{"
                                      "border: 1px solid transparent; text-align: center;"
@@ -226,6 +237,14 @@ void MainWindow::authorizeUser()
 void MainWindow::registerWindowShow()
 {
     ui_Auth->hide();
+    QDesktopWidget desktop;
+    QRect rect = desktop.availableGeometry(ui_Reg);
+    QPoint center = rect.center();
+    int x = center.x() - (width()/2);
+    int y = center.y() - (height()/2);
+    center.setX(x);
+    center.setY(y);
+    move(center);
     ui_Reg->show();
 }
 
@@ -280,8 +299,19 @@ void MainWindow::registerUser()
     else
     {
         ui_Reg->hide();
+
+        ui_Auth->hide();
+        QDesktopWidget desktop;
+        QRect rect = desktop.availableGeometry(ui_Auth);
+        QPoint center = rect.center();
+        int x = center.x() - (width()/2);
+        int y = center.y() - (height()/2);
+        center.setX(x);
+        center.setY(y);
+        move(center);
+
         ui_Auth->show();
-        QMessageBox::information(this, "Регистрация завершена успешно!", "Регистрация завершена успешно. Теперь Вы можете войти в свою учетную запись!");
+        //QMessageBox::information(this, "Регистрация завершена успешно!", "Регистрация завершена успешно. Теперь Вы можете войти в свою учетную запись!");
     }
 }
 
@@ -289,6 +319,14 @@ void MainWindow::registerUser()
 void MainWindow::display()                                                              //реализация пользотвальского метода отображения главного окна
 {
     this->hide();
+    ui_Auth->hide();
+    QDesktopWidget desktop;
+    QRect rect = desktop.availableGeometry(ui_Auth);
+    QPoint center = rect.center();
+    int x = center.x() - (width()/2);
+    int y = center.y() - (height()/2);
+    center.setX(x);
+    center.setY(y);
     ui_Auth->show();//отобразить окно авторизации(НЕ главное окно)
 }
 
@@ -328,9 +366,9 @@ void MainWindow::connectDB()
     if(!opened)
     {
         qDebug() << "Failed to connect DB";
-        QMessageBox::critical(this, tr("Error"),tr("Error to open database %1!")
+        /*QMessageBox::critical(this, tr("Error"),tr("Error to open database %1!")
                               .arg(dbName));
-        ::exit(EXIT_FAILURE);
+        ::exit(EXIT_FAILURE);*/
     }
 
     // Создание таблиц базы данных
@@ -355,9 +393,9 @@ void MainWindow::connectDB()
          if(!query.exec(queryStr))
         {
             qDebug() << "Unable to create a table" << query.lastError() << queryStr;
-            QMessageBox::critical(this, tr("Error"),tr("Error to create table users2 in database %1!")
+            /*QMessageBox::critical(this, tr("Error"),tr("Error to create table users2 in database %1!")
                                   .arg(dbName));
-            ::exit(EXIT_FAILURE);
+            ::exit(EXIT_FAILURE);*/
         }
     }
 
@@ -375,9 +413,9 @@ void MainWindow::connectDB()
          if(!query.exec(queryStr))
         {
             qDebug() << "Unable to create a table" << query.lastError() << queryStr;
-            QMessageBox::critical(this, tr("Error"),tr("Error to create table notes in database %1!")
+            /*QMessageBox::critical(this, tr("Error"),tr("Error to create table notes in database %1!")
                                   .arg(dbName));
-            ::exit(EXIT_FAILURE);
+            ::exit(EXIT_FAILURE);*/
         }
 
     }
@@ -429,6 +467,8 @@ void MainWindow::on_checkBoxes_clicked()
 
 void MainWindow::on_btnAddNote_clicked()
 {
+
+    ui->label_3->clear();
     ui->progressBar->setMinimum(0);
     ui->progressBar->setMaximum(100);
     if(number_click < 11)
@@ -504,12 +544,18 @@ void MainWindow::on_btnSaveInDB_clicked()
 
     if(success)
     {
+        if (status_theme==0)
+            ui->label_3->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
+        else
+            ui->label_3->setStyleSheet("QLabel {color: rgb(120, 65, 81); background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
+
+        ui->label_3->setText(tr("Записи успешно сохранены"));
         //ui_Note->show();
-        QMessageBox::information(this, "Сохранено", "Записи успешно сохранены в базе данных.");
+        //QMessageBox::information(this, "Сохранено", "Записи успешно сохранены в базе данных.");
         changed = false;
     }
-    else
-        QMessageBox::critical(this, "Ошибка", "Произошла ошибка при сохранении записей в базе данных.");
+    //else
+        //QMessageBox::critical(this, "Ошибка", "Произошла ошибка при сохранении записей в базе данных.");
 
 }
 
@@ -521,9 +567,9 @@ void MainWindow::on_btnDeleteFromDB_clicked()
     QString dateStr = date.toString("yyyy-MM-dd");
     qDebug() << "date " << dateStr;
 
-    QMessageBox::StandardButton ans = QMessageBox::question(this, "Удаление", QString("Вы уверены, что хотите удалить все записи за %1?\nЗаписи невозможно будет восстановить.").arg(dateStr));
+    /*QMessageBox::StandardButton ans = QMessageBox::question(this, "Удаление", QString("Вы уверены, что хотите удалить все записи за %1?\nЗаписи невозможно будет восстановить.").arg(dateStr));
     if(ans != QMessageBox::Yes)
-        return;
+        return;*/
 
     // Удаляем все записи за текущую дату
     queryStr = QString(
@@ -535,12 +581,12 @@ void MainWindow::on_btnDeleteFromDB_clicked()
             ;
 
     QSqlQuery query(queryStr, db);
-    if(!query.exec())
+    /*if(!query.exec())
     {
         qDebug() << "Error to delete notes " << query.lastError() << " query " << queryStr;
         QMessageBox::critical(this, "Ошибка", "Произошла ошибка при удалении записей из базы данных.");
         return;
-    }
+    }*/
 
     for(int i = 1; i < 11; i++)
     {
@@ -549,8 +595,10 @@ void MainWindow::on_btnDeleteFromDB_clicked()
     number_click = 1;
     progres = 0;
     real_progres = 0;
-    QMessageBox::information(this, "Успешно", "Записи успешно удалены.");
+    //QMessageBox::information(this, "Успешно", "Записи успешно удалены.");
     changed = false;
+    //ui->label_3->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
+    ui->label_3->setText(tr("Записи успешно удалены"));
 }
 
 void MainWindow::on_calendarWidget_selectionChanged()
@@ -559,12 +607,12 @@ void MainWindow::on_calendarWidget_selectionChanged()
     QString dateStr = date.toString("yyyy-MM-dd");
     qDebug() << "date " << dateStr;
 
-    if(changed)
+    /*if(changed)
     {
         QMessageBox::StandardButton ans = QMessageBox::question(this, "Переключение", QString("У Вас есть несохраненные данные. Все несохраненные данные будут потеряны. Сохранить данные перед переключением?"));
         if(ans == QMessageBox::Yes)
             on_btnSaveInDB_clicked();
-    }
+    }*/
 
     for(int i = 1; i < 11; i++)
     {
@@ -782,17 +830,22 @@ void MainWindow::on_themeButton_clicked()
 void MainWindow::on_btnSaveInDB_2_clicked()
 {
     on_btnSaveInDB_clicked();
+    ui->label_3->setText(tr("Записи успешно сохранены"));
     return;
 }
 
 void MainWindow::on_btnAddNote_2_clicked()
 {
+    ui->label_3->clear();
+
     on_btnAddNote_clicked();
+
     return;
 }
 
 void MainWindow::on_btnDeleteFromDB_2_clicked()
 {
+    ui->label_3->setText(tr("Записи успешно удалены"));
     on_btnDeleteFromDB_clicked();
     return;
 }
