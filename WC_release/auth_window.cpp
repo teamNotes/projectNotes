@@ -1,18 +1,11 @@
 #include "auth_window.h"
 #include "ui_auth_window.h"
-#include <QPoint>
-#include <QDesktopWidget>
 
 auth_window::auth_window(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::auth_window)
 {
     ui->setupUi(this);
-    QRect desktopRect = QApplication::desktop()->availableGeometry(this);
-    QPoint center = desktopRect.center();
-
-    move(center.x()-width()*0.5, center.y()-height()*0.5);
-
     ui->loginPushButton->setFixedHeight(90);
     ui->loginPushButton->setFixedWidth(230);
     ui->loginPushButton->setStyleSheet("QPushButton {color: rgb(120, 65, 81); background-color: white; border-width: 1px; font: italic 12pt \"Montserrat\"; border-color: white; border-radius: 45px;}");
@@ -24,7 +17,7 @@ auth_window::auth_window(QWidget *parent) :
     ui->passwordLineEdit->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
     ui->label_Name_2->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
     ui->label_Name_3->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
-
+    ui->label_Error->setStyleSheet("QLabel {color: rgb(234, 6, 120); background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
 }
 
 auth_window::~auth_window()

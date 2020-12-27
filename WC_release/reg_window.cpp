@@ -1,21 +1,12 @@
 #include "reg_window.h"
 #include "ui_reg_window.h"
 #include <QtDebug>
-#include <QPoint>
-#include <QDesktopWidget>
 
 reg_window::reg_window(QWidget *parent) :                               //реализация конструктора окна регистрации
     QDialog(parent),                                                    //список инициализации
     ui(new Ui::reg_window)
 {
     ui->setupUi(this);
-
-    QRect desktopRect = QApplication::desktop()->availableGeometry(this);
-    QPoint center = desktopRect.center();
-
-    move(center.x()-width()*0.5, center.y()-height()*0.5);
-
-
     ui->registerPushButton->setText("Регистрация");
     ui->registerPushButton->setStyleSheet("QPushButton {color: rgb(120, 65, 81); background-color: white; border-width: 1px; font: italic 12pt \"Montserrat\"; border-color: white; border-radius: 45px;}");
     ui->registerPushButton->setFixedHeight(90);
@@ -26,6 +17,7 @@ reg_window::reg_window(QWidget *parent) :                               //реа
     ui->label_Name->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
     ui->label_Pass->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
     ui->label_Confirm->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
+    ui->label_Error->setStyleSheet("QLabel {color: rgb(234, 6, 120); background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
 }
 
 reg_window::~reg_window()                                               //реализация деструктора
@@ -38,16 +30,17 @@ void reg_window::on_registerPushButton_clicked()                        //реа
     // Проверяем, что имя пользователя и пароль введены
     if(ui->nameLineEdit->text().isEmpty())
     {
-        ui->nameLineEdit->setFocus(Qt::OtherFocusReason);
+        ui->nameLineEdit->setFocus(Qt::OtherFocusReason);               //Установка фокуса в сторку ввода логина
         ui->label_Error->setText(tr("Введите имя пользователя"));
         return;
     }
     if(ui->passwordLineEdit->text().isEmpty())
     {
-        ui->passwordLineEdit->setFocus(Qt::OtherFocusReason);
+        ui->passwordLineEdit->setFocus(Qt::OtherFocusReason);           //Установка фокуса в сторку ввода пароля
         ui->label_Error->setText(tr("Введите пароль"));
         return;
     }
+    //Проверяем, что пароли совпадают
     if(!checkPass())
     {
         ui->passwordLineEdit->setFocus(Qt::OtherFocusReason);

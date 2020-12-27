@@ -2,14 +2,13 @@
 #include "ui_mainwindow.h"
 #include "auth_window.h"
 #include "reg_window.h"
+#include "note.h"
 #include <QDebug>
 #include <QWidget>
 #include <QLayout>
 #include <QMessageBox>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QDesktopWidget>
-#include <QPoint>
 
 
 
@@ -17,24 +16,11 @@ MainWindow::MainWindow(QWidget *parent) :               //реализация �
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     ui_Auth(nullptr),
-    ui_Reg(nullptr)//список инициализации
+    ui_Reg(nullptr),
+    ui_Note(nullptr) //список инициализации
 
 {
-    /*QDesktopWidget desktop;
-    QRect rect = desktop.availableGeometry(this);
-    QPoint center = rect.center();
-    int x = center.x() - (width()/2);
-    int y = center.y() - (height()/2);
-    center.setX(x);
-    center.setY(y);
-    move(center);*/
-
-    /*QRect desktopRect = QApplication::desktop()->availableGeometry(this);
-    QPoint center = desktopRect.center();
-
-    move(center.x()-width()*0.5, center.y()-height()*0.5);*/
-
-    ui->setupUi(this);  //установка интерфейса главного окна
+    ui->setupUi(this);                                  //установка интерфейса главного окна
 
     lineEdits = QList<QLineEdit*>()
             << ui->lineEdit
@@ -45,7 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :               //реализация �
             << ui->lineEdit6
             << ui->lineEdit7
             << ui->lineEdit8
-            << ui->lineEdit9;
+            << ui->lineEdit9
+            << ui->lineEdit10;
 
     checkBoxes = QList<QCheckBox*>()
             << ui->checkBox
@@ -56,7 +43,8 @@ MainWindow::MainWindow(QWidget *parent) :               //реализация �
             << ui->checkBox6
             << ui->checkBox7
             << ui->checkBox8
-            << ui->checkBox9;
+            << ui->checkBox9
+            << ui->checkBox10;
 
     labels = QList<QLabel*>()
             << ui->label
@@ -67,7 +55,8 @@ MainWindow::MainWindow(QWidget *parent) :               //реализация �
             << ui->label6
             << ui->label7
             << ui->label8
-            << ui->label9;
+            << ui->label9
+            << ui->label10;
 
 
     user_id = 0;
@@ -76,11 +65,12 @@ MainWindow::MainWindow(QWidget *parent) :               //реализация �
 
     ui_Reg = new reg_window();
     ui_Auth = new auth_window();
+    ui_Note = new Note();
 
     lastDateStr = ui->calendarWidget->selectedDate().toString("dd-MM-yyyy");
 
     connect(ui_Reg, &reg_window::register_button_clicked2, //соединение кнопки регистрации экземпляра окна авторизации
-            this,&MainWindow::registerUser);                 //со слотом-обработчиком регистраци
+            this,&MainWindow::registerUser);               //со слотом-обработчиком регистраци
     connect(ui_Reg,&reg_window::destroyed,
             ui_Auth, &auth_window::show);
 
@@ -88,12 +78,11 @@ MainWindow::MainWindow(QWidget *parent) :               //реализация �
             this, &MainWindow::authorizeUser);               //со слотом-обработчиком авторизации
     connect(ui_Auth, &auth_window::destroyed,               //соединение сигнала уничтожения экземпляра окна авторизации
             this, &MainWindow::show);                        //с методом отображения главного окна
-
     connect(ui_Auth, &auth_window::register_button_clicked, //соединение сигнала кнопки регистрации экземпляра окна авторизации
             this,&MainWindow::registerWindowShow);           //со слотом вызывающим окно регистрации
 
     // Чекбоксы
-    connect(ui->checkBox,  &QCheckBox::clicked , this, &MainWindow::on_checkBoxes_clicked);
+    connect(ui->checkBox,   &QCheckBox::clicked , this, &MainWindow::on_checkBoxes_clicked);
     connect(ui->checkBox2,  &QCheckBox::clicked, this, &MainWindow::on_checkBoxes_clicked);
     connect(ui->checkBox3,  &QCheckBox::clicked, this, &MainWindow::on_checkBoxes_clicked);
     connect(ui->checkBox4,  &QCheckBox::clicked, this, &MainWindow::on_checkBoxes_clicked);
@@ -103,10 +92,9 @@ MainWindow::MainWindow(QWidget *parent) :               //реализация �
     connect(ui->checkBox8,  &QCheckBox::clicked, this, &MainWindow::on_checkBoxes_clicked);
     connect(ui->checkBox9,  &QCheckBox::clicked, this, &MainWindow::on_checkBoxes_clicked);
     connect(ui->checkBox10,  &QCheckBox::clicked, this, &MainWindow::on_checkBoxes_clicked);
-  //  connect(ui->btnAddNote, &QPushButton::clicked, this, &MainWindow::on_btnAddNote_clicked);
+    //  connect(ui->btnAddNote, &QPushButton::clicked, this, &MainWindow::on_btnAddNote_clicked);
 
     //connect(&ui_Auth,SIGNAL(destroyed()), this, SLOT(AuthAquired()));
-
 }
 
 void MainWindow::authorizeUser()
@@ -179,22 +167,69 @@ void MainWindow::authorizeUser()
                                      "color: rgba(120, 65, 81);"
                                      "border-radius: 20px;"
                                      "border-width: 2px;"
-
                                      "background-color: white;"
                                       "}"
                                      "QProgressBar::chunk {background-color: rgba(224, 185, 203, 255); border-radius: 20px;}");
+      ui->calendarWidget->setStyleSheet("QToolButton {"
+                                        "height: 80px;"
+                                        "width: 700px;"
+                                        "color: white;"
+                                        "font: italic 14pt \"Montserrat\";"
+                                        "icon-size: 0px;"
+                                        "background-color: rgb(120, 65, 81);"
+                                        "}"
+                                        "QAbstractItemView:enabled {"
+                                        "font: italic 10pt \"Montserrat\";"
+                                        "color: white;"
+                                        "background-color: rgb(120, 65, 81);"
+                                        "selection-background-color: rgba(255, 255, 255, 40);"
+                                        "selection-color: white;"
+                                        "alternate-background-color: rgb(120, 65, 81);"
+                                        "}");
+      ui->label_Name_2->setVisible(false);
+      ui->label_8->setVisible(false);
+      ui->label_9->setVisible(false);
+      ui->label_10->setVisible(false);
+      ui->label_11->setVisible(false);
+      ui->btnAddNote_2->setVisible(false);
+      ui->btnDeleteFromDB_2->setVisible(false);
+      ui->btnSaveInDB_2->setVisible(false);
       qDebug() << "User authorization success";
 
+      QDate date = ui->calendarWidget->selectedDate();
+      QDate cur(date.year(), date.month(), 1);
+      int curMonth = date.month();
+
+      // Обнуляем формат
+      while(cur.month() == curMonth)
+      {
+          QTextCharFormat format = ui->calendarWidget->dateTextFormat(cur);
+          format.setForeground(QBrush(QColor(255, 255, 255), Qt::SolidPattern));
+          ui->calendarWidget->setDateTextFormat(cur, format);
+          cur = cur.addDays(1);
+      }
+      QSqlQuery query2(queryStr, db);
+      while(query2.next())
+      {
+          int day = query2.value("day").toInt();
+          int cnt = query2.value("cnt").toInt();
+          QString notedate = query2.value("notedate").toString();
+          qDebug() << "day " << day << " cnt " << cnt;
+          QDate date = QDate::fromString(notedate, "yyyy-MM-dd");
+          QTextCharFormat format = ui->calendarWidget->dateTextFormat(date);
+          format.setForeground(QBrush(QColor(234, 6, 120), Qt::NoBrush));
+          ui->calendarWidget->setDateTextFormat(date, format);
+      }
   }
 }
 
 void MainWindow::registerWindowShow()
 {
-
-
     ui_Auth->hide();
     ui_Reg->show();
 }
+
+
 
 void MainWindow::registerUser()
 {
@@ -254,7 +289,7 @@ void MainWindow::registerUser()
 void MainWindow::display()                                                              //реализация пользотвальского метода отображения главного окна
 {
     this->hide();
-    ui_Auth->show();                                                                     //отобразить окно авторизации(НЕ главное окно)
+    ui_Auth->show();//отобразить окно авторизации(НЕ главное окно)
 }
 
 
@@ -282,7 +317,7 @@ MainWindow::~MainWindow()                                                       
     //exit(0);                                                                       //завершить приложение
 }
 
-bool MainWindow::connectDB()
+void MainWindow::connectDB()
 {
     dbName = "db";
     db = QSqlDatabase::addDatabase("QSQLITE", dbName);
@@ -324,8 +359,6 @@ bool MainWindow::connectDB()
                                   .arg(dbName));
             ::exit(EXIT_FAILURE);
         }
-
-
     }
 
     if(!tables.contains("notes"))
@@ -347,16 +380,7 @@ bool MainWindow::connectDB()
             ::exit(EXIT_FAILURE);
         }
 
-
     }
-
-    if (ui->checkBox->isChecked())
-        ui->lineEdit->setStyleSheet("QLineEdit {color: red; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
-    else
-        ui->lineEdit->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
-
-
-
 }
 
 void MainWindow::clearLine(int line)
@@ -366,9 +390,11 @@ void MainWindow::clearLine(int line)
     lineEdits.at(line-1)->setText("");
     labels.at(line-1)->setVisible(true);
     checkBoxes.at(line-1)->setChecked(false);
-    progres -= 1;
+    ui->progressBar->setValue(0);
+    ui->progressBar->repaint();
     return;
 }
+
 void MainWindow::on_checkBoxes_clicked()
 {
     QCheckBox *checkBox = qobject_cast<QCheckBox*>(sender());
@@ -387,7 +413,10 @@ void MainWindow::on_checkBoxes_clicked()
     }
     else
     {
-        lineEdits.at(index)->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
+        if (status_theme == 1)
+            lineEdits.at(index)->setStyleSheet("QLineEdit {color: rgb(120, 65, 81); background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: rgb(120, 65, 81); border-bottom-width: 1px;}");
+        else
+            lineEdits.at(index)->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
         real_progres -= 100;
         double i = real_progres/progres;
         ui->progressBar->setValue((int)i);
@@ -402,15 +431,18 @@ void MainWindow::on_btnAddNote_clicked()
 {
     ui->progressBar->setMinimum(0);
     ui->progressBar->setMaximum(100);
-
-
-
-    if(number_click > 10)   return;
-
-    lineEdits.at(number_click-1)->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
-    labels.at(number_click-1)->setVisible(false);
-    number_click++;
-    progres += 1;
+    if(number_click < 11)
+    {
+        if (status_theme == 1)
+            lineEdits.at(number_click-1)->setStyleSheet("QLineEdit {color: rgb(120, 65, 81); background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: rgb(120, 65, 81); border-bottom-width: 1px;}");
+        else
+            lineEdits.at(number_click-1)->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
+        labels.at(number_click-1)->setVisible(false);
+        number_click++;
+        if (number_click == 11)
+            return;
+        progres++;
+    }
     changed = true;
     return;
 }
@@ -450,7 +482,7 @@ void MainWindow::on_btnSaveInDB_clicked()
     }
 
     // Удаляем лишние заметки
-    for(int i = number_click; i <= 10; i++)
+    for(int i = number_click; i <= 11; i++)
     {
         queryStr = QString(
                     "DELETE FROM notes "
@@ -472,6 +504,7 @@ void MainWindow::on_btnSaveInDB_clicked()
 
     if(success)
     {
+        //ui_Note->show();
         QMessageBox::information(this, "Сохранено", "Записи успешно сохранены в базе данных.");
         changed = false;
     }
@@ -509,12 +542,13 @@ void MainWindow::on_btnDeleteFromDB_clicked()
         return;
     }
 
-    for(int i = 1; i < 10; i++)
+    for(int i = 1; i < 11; i++)
     {
         clearLine(i);
     }
     number_click = 1;
-
+    progres = 0;
+    real_progres = 0;
     QMessageBox::information(this, "Успешно", "Записи успешно удалены.");
     changed = false;
 }
@@ -532,11 +566,13 @@ void MainWindow::on_calendarWidget_selectionChanged()
             on_btnSaveInDB_clicked();
     }
 
-    for(int i = 1; i < 10; i++)
+    for(int i = 1; i < 11; i++)
     {
         clearLine(i);
     }
     number_click = 1;
+    progres = 0;
+    real_progres = 0;
 
     queryStr = QString(
                 "SELECT * FROM notes "
@@ -569,62 +605,194 @@ void MainWindow::on_calendarWidget_selectionChanged()
 
         line++;
     }
-    changed = false;
-    lastDateStr = dateStr;
-    ui->tabWidget->setCurrentIndex(0);
-}
 
-void MainWindow::on_tabWidget_currentChanged(int index)
-{
-    if(index != 1) return;
-    QDate date = ui->calendarWidget->selectedDate();
-    QString dateStr = date.toString("MM");
-    qDebug() << "date " << dateStr;
+    QString dateStr2 = date.toString("MM");
+    qDebug() << "date " << dateStr2;
 
     queryStr = QString(
-                "SELECT strftime('%d', notedate) AS day, "
-                "COUNT(*) AS cnt, notedate "
+                "SELECT strftime('%d', notedate) AS day, COUNT(*) AS cnt, notedate "
                 "FROM notes "
                 "WHERE strftime('%m', notedate) = '%1' "
                 " AND  user_id = %2 "
                 "GROUP BY strftime('%d', notedate)")
-            .arg(dateStr)
+            .arg(dateStr2)
             .arg(user_id)
             ;
 
-    QSqlQuery query(queryStr, db);
-    if(!query.exec())
+    QSqlQuery query2(queryStr, db);
+    if(!query2.exec())
     {
-        qDebug() << "Error to select notes " << query.lastError() <<
-                    " query " << queryStr;
+        qDebug() << "Error to select notes " << query2.lastError() << " query " << queryStr;
         return;
     }
-
     QDate cur(date.year(), date.month(), 1);
     int curMonth = date.month();
 
     // Обнуляем формат
-    while(cur.month() == curMonth)
+    if (status_theme == 0)
     {
-        QTextCharFormat format = ui->calendarWidget->dateTextFormat(cur);
-        format.setForeground(QBrush(Qt::black, Qt::SolidPattern));
-        ui->calendarWidget->setDateTextFormat(cur, format);
-        cur = cur.addDays(1);
+        while(cur.month() == curMonth)
+        {
+            QTextCharFormat format = ui->calendarWidget->dateTextFormat(cur);
+            format.setForeground(QBrush(QColor(255, 255, 255), Qt::SolidPattern));
+            ui->calendarWidget->setDateTextFormat(cur, format);
+            cur = cur.addDays(1);
+        }
     }
-
-    // Устнаваливаем формат для дат, где есть записи
-    while(query.next())
+    else
     {
-        int day = query.value("day").toInt();
-        int cnt = query.value("cnt").toInt();
-        QString notedate = query.value("notedate").toString();
+        while(cur.month() == curMonth)
+        {
+            QTextCharFormat format = ui->calendarWidget->dateTextFormat(cur);
+            format.setForeground(QBrush(QColor(120, 65, 81), Qt::SolidPattern));
+            ui->calendarWidget->setDateTextFormat(cur, format);
+            cur = cur.addDays(1);
+        }
+    }
+    // Устнаваливаем формат для дат, где есть записи
+    while(query2.next())
+    {
+        int day = query2.value("day").toInt();
+        int cnt = query2.value("cnt").toInt();
+        QString notedate = query2.value("notedate").toString();
         qDebug() << "day " << day << " cnt " << cnt;
         QDate date = QDate::fromString(notedate, "yyyy-MM-dd");
         QTextCharFormat format = ui->calendarWidget->dateTextFormat(date);
-        format.setForeground(QBrush(Qt::green, Qt::SolidPattern));
+        format.setForeground(QBrush(QColor(234, 6, 120), Qt::NoBrush));
         ui->calendarWidget->setDateTextFormat(date, format);
     }
-
+    changed = false;
+    lastDateStr = dateStr;
 }
 
+void MainWindow::on_themeButton_clicked()
+{
+    if (status_theme == 0)
+    {
+        MainWindow::setStyleSheet("QMainWindow {background-color: rgb(234, 204,215)}");
+        ui->themeButton->setText("Темная тема");
+        ui->themeButton->setStyleSheet("QPushButton {background-color: rgba(255, 255, 255, 0);border-width: 1.5px; color: rgb(120, 65, 81); font:  italic 10pt \"Montserrat\"; border-style: solid; border-color: rgb(120, 65, 81); border-radius: 15px;}");
+        ui->progressBar->setStyleSheet("QProgressBar{"
+                                       "border: 1px solid transparent; text-align: center;"
+                                       "color: rgb(120, 65, 81);"
+                                       "border-radius: 20px;"
+                                       "border-width: 2px;"
+                                       "background-color: white;"
+                                        "}"
+                                       "QProgressBar::chunk {background-color: rgba(234, 204,215); border-radius: 20px;}");
+        ui->calendarWidget->setStyleSheet("QToolButton {"
+                                          "height: 80px;"
+                                          "width: 700px;"
+                                          "color: rgb(120, 65, 81);"
+                                          "font: italic 14pt \"Montserrat\";"
+                                          "icon-size: 0px;"
+                                          "background-color: rgb(234, 204,215);"
+                                          "}"
+                                          "QAbstractItemView:enabled {"
+                                          "font: italic 10pt \"Montserrat\";"
+                                          "color: rgb(120, 65, 81);"
+                                          "background-color: rgb(234, 204,215);"
+                                          "selection-background-color: rgba(255, 255, 255, 40);"
+                                          "selection-color: rgb(120, 65, 81);"
+                                          "alternate-background-color: rgb(234, 204,215);"
+                                          "}");
+        for (int i = 0; i < 10; i++)
+        {
+            labels.at(i)->setStyleSheet("QLabel {background-color: rgb(234, 204,215)}");
+        }
+        ui->label_Name->setVisible(false);
+        ui->label_Name_2->setVisible(true);
+        ui->label_2->setVisible(false);
+        ui->label_8->setVisible(true);
+        ui->label_7->setVisible(false);
+        ui->label_9->setVisible(true);
+        ui->label_5->setVisible(false);
+        ui->label_10->setVisible(true);
+        ui->label_6->setVisible(false);
+        ui->label_11->setVisible(true);
+        ui->btnAddNote->setVisible(false);
+        ui->btnDeleteFromDB->setVisible(false);
+        ui->btnSaveInDB->setVisible(false);
+        ui->btnAddNote_2->setVisible(true);
+        ui->btnDeleteFromDB_2->setVisible(true);
+        ui->btnSaveInDB_2->setVisible(true);
+        status_theme = 1;
+    }
+    else
+    {
+        MainWindow::setStyleSheet("QMainWindow {background-color: rgb(120, 65, 81)}");
+        ui->themeButton->setText("Светлая тема");
+        ui->themeButton->setStyleSheet("QPushButton {background-color: rgba(255, 255, 255, 0);border-width: 1.5px; color: white; font:  italic 10pt \"Montserrat\"; border-style: solid; border-color: white; border-radius: 15px;}");
+        ui->progressBar->setStyleSheet("QProgressBar{"
+                                       "border: 1px solid transparent; text-align: center;"
+                                       "color: rgb(120, 65, 81);"
+                                       "border-radius: 20px;"
+                                       "border-width: 2px;"
+                                       "background-color: white;"
+                                        "}"
+                                       "QProgressBar::chunk {background-color: rgba(224, 185, 203, 255); border-radius: 20px;}");
+        ui->calendarWidget->setStyleSheet("QToolButton {"
+                                          "height: 80px;"
+                                          "width: 700px;"
+                                          "color: white;"
+                                          "font: italic 14pt \"Montserrat\";"
+                                          "icon-size: 0px;"
+                                          "background-color: rgb(120, 65, 81);"
+                                          "}"
+                                          "QAbstractItemView:enabled {"
+                                          "font: italic 10pt \"Montserrat\";"
+                                          "color: white;"
+                                          "background-color: rgb(120, 65, 81);"
+                                          "selection-background-color: rgba(255, 255, 255, 40);"
+                                          "selection-color: white;"
+                                          "alternate-background-color: rgb(120, 65, 81);"
+                                          "}");
+        for (int i = 0; i < 10; i++)
+        {
+            labels.at(i)->setStyleSheet("QLabel {background-color: rgb(120, 65, 81)}");
+        }
+        ui->label_Name->setVisible(true);
+        ui->label_Name_2->setVisible(false);
+        ui->label_2->setVisible(true);
+        ui->label_8->setVisible(false);
+        ui->label_7->setVisible(true);
+        ui->label_9->setVisible(false);
+        ui->label_5->setVisible(true);
+        ui->label_10->setVisible(false);
+        ui->label_6->setVisible(true);
+        ui->label_11->setVisible(false);
+        ui->btnAddNote->setVisible(true);
+        ui->btnDeleteFromDB->setVisible(true);
+        ui->btnSaveInDB->setVisible(true);
+        ui->btnAddNote_2->setVisible(false);
+        ui->btnDeleteFromDB_2->setVisible(false);
+        ui->btnSaveInDB_2->setVisible(false);
+        status_theme = 0;
+    }
+    for (int i = 0; i < 10; i++)
+    {
+        if (status_theme == 1)
+            lineEdits.at(i)->setStyleSheet("QLineEdit {color: rgb(120, 65, 81); background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: rgb(120, 65, 81); border-bottom-width: 1px;}");
+        else
+            lineEdits.at(i)->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
+    }
+    on_calendarWidget_selectionChanged();
+}
 
+void MainWindow::on_btnSaveInDB_2_clicked()
+{
+    on_btnSaveInDB_clicked();
+    return;
+}
+
+void MainWindow::on_btnAddNote_2_clicked()
+{
+    on_btnAddNote_clicked();
+    return;
+}
+
+void MainWindow::on_btnDeleteFromDB_2_clicked()
+{
+    on_btnDeleteFromDB_clicked();
+    return;
+}
