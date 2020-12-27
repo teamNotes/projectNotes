@@ -1,6 +1,7 @@
 #ifndef NOTE_H
 #define NOTE_H
 
+#include <QObject>
 #include <QWidget>
 
 namespace Ui {
@@ -14,6 +15,9 @@ class Note : public QWidget
 public:
     explicit Note(QWidget *parent = nullptr);
     ~Note();
+
+private slots:
+    void on_pushButton_clicked();
 
 private:
     Ui::Note *ui;

@@ -2,7 +2,7 @@
 #include "ui_reg_window.h"
 #include <QtDebug>
 
-reg_window::reg_window(QDialog *parent) :                               //реализация конструктора окна регистрации
+reg_window::reg_window(QWidget *parent) :                               //реализация конструктора окна регистрации
     QDialog(parent),                                                    //список инициализации
     ui(new Ui::reg_window)
 {
@@ -17,6 +17,7 @@ reg_window::reg_window(QDialog *parent) :                               //реа
     ui->label_Name->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
     ui->label_Pass->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
     ui->label_Confirm->setStyleSheet("QLabel {color: white; background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
+    ui->label_Error->setStyleSheet("QLabel {color: rgb(234, 6, 120); background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
 }
 
 reg_window::~reg_window()                                               //реализация деструктора
@@ -26,6 +27,26 @@ reg_window::~reg_window()                                               //реа
 
 void reg_window::on_registerPushButton_clicked()                        //реализация слота нажатия кнопки регистрации
 {
+    // Проверяем, что имя пользователя и пароль введены
+    if(ui->nameLineEdit->text().isEmpty())
+    {
+        ui->nameLineEdit->setFocus(Qt::OtherFocusReason);               //Установка фокуса в сторку ввода логина
+        ui->label_Error->setText(tr("Введите имя пользователя"));
+        return;
+    }
+    if(ui->passwordLineEdit->text().isEmpty())
+    {
+        ui->passwordLineEdit->setFocus(Qt::OtherFocusReason);           //Установка фокуса в сторку ввода пароля
+        ui->label_Error->setText(tr("Введите пароль"));
+        return;
+    }
+    //Проверяем, что пароли совпадают
+    if(!checkPass())
+    {
+        ui->passwordLineEdit->setFocus(Qt::OtherFocusReason);
+        ui->label_Error->setText(tr("Пароли не совпадают"));
+        return;
+    }
     emit register_button_clicked2();
 }
 
@@ -57,5 +78,10 @@ QString reg_window::getPass()
 bool reg_window::checkPass()
 {
     return (m_confirmation == m_userPass);
+}
+
+void reg_window::setErrorText(QString msg)
+{
+    ui->label_Error->setText(msg);
 }
 
