@@ -67,8 +67,6 @@ private slots:
     void on_btnSaveInDB_clicked();
     void on_btnDeleteFromDB_clicked();
     void on_calendarWidget_selectionChanged();
-    void on_tabWidget_currentChanged(int index);
-    void on_calendarWidget_currentPageChanged(int year, int month);
     void on_themeButton_clicked();
     void on_btnSaveInDB_2_clicked();
     void on_btnAddNote_2_clicked();

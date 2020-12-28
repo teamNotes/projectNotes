@@ -92,9 +92,7 @@ MainWindow::MainWindow(QWidget *parent) :               //реализация �
     connect(ui->checkBox8,  &QCheckBox::clicked, this, &MainWindow::on_checkBoxes_clicked);
     connect(ui->checkBox9,  &QCheckBox::clicked, this, &MainWindow::on_checkBoxes_clicked);
     connect(ui->checkBox10,  &QCheckBox::clicked, this, &MainWindow::on_checkBoxes_clicked);
-    //  connect(ui->btnAddNote, &QPushButton::clicked, this, &MainWindow::on_btnAddNote_clicked);
 
-    //connect(&ui_Auth,SIGNAL(destroyed()), this, SLOT(AuthAquired()));
 }
 
 void MainWindow::authorizeUser()
@@ -180,7 +178,7 @@ void MainWindow::authorizeUser()
                                      "border-width: 2px;"
                                      "background-color: white;"
                                       "}"
-                                     "QProgressBar::chunk {background-color: rgba(224, 185, 203, 255); border-radius: 20px;}");
+                                     "QProgressBar::chunk {background-color: rgb(234, 6, 120); border-radius: 20px;}");
       ui->calendarWidget->setStyleSheet("QToolButton {"
                                         "height: 80px;"
                                         "width: 700px;"
@@ -349,7 +347,6 @@ MainWindow::~MainWindow()                                                       
             qDebug() << "Unable to update data on exit "  << query.lastError() << " : " << query.lastQuery() ;
         }
     }
-    //db.removeDatabase(dbName);
     qDebug() << "MainWindow Destroyed";
     delete ui;                                                                     //удалить указатель на экземпляр главного окна
     //exit(0);                                                                       //завершить приложение
@@ -364,17 +361,11 @@ void MainWindow::connectDB()
     bool opened =  db.open();
 
     if(!opened)
-    {
         qDebug() << "Failed to connect DB";
-        /*QMessageBox::critical(this, tr("Error"),tr("Error to open database %1!")
-                              .arg(dbName));
-        ::exit(EXIT_FAILURE);*/
-    }
 
     // Создание таблиц базы данных
     // Сначала проверям, существует ли таблица.
     // Если не существует, то создаем заново
-    //QSqlDatabase db = QSqlDatabase::database(dbName);
 
     QStringList tables = db.tables();
     QSqlQuery query(db);
@@ -391,12 +382,7 @@ void MainWindow::connectDB()
                    "length INTEGER, "
                    "PRIMARY KEY (user_id));";
          if(!query.exec(queryStr))
-        {
             qDebug() << "Unable to create a table" << query.lastError() << queryStr;
-            /*QMessageBox::critical(this, tr("Error"),tr("Error to create table users2 in database %1!")
-                                  .arg(dbName));
-            ::exit(EXIT_FAILURE);*/
-        }
     }
 
     if(!tables.contains("notes"))
@@ -408,16 +394,12 @@ void MainWindow::connectDB()
                    "notedate DATETIME NOT NULL, "
                    "note TEXT NOT NULL, "
                    "done INTEGER NOT NULL,"
+                   "progres INTEGER,"
+                   "real_progres INTEGER,"
                    "PRIMARY KEY (note_id),"
                    "UNIQUE(user_id, notedate, note_num));";
          if(!query.exec(queryStr))
-        {
             qDebug() << "Unable to create a table" << query.lastError() << queryStr;
-            /*QMessageBox::critical(this, tr("Error"),tr("Error to create table notes in database %1!")
-                                  .arg(dbName));
-            ::exit(EXIT_FAILURE);*/
-        }
-
     }
 }
 
@@ -443,9 +425,9 @@ void MainWindow::on_checkBoxes_clicked()
 
     if (checkBox->isChecked())
     {
-        lineEdits.at(index)->setStyleSheet("QLineEdit {color: gray; background-color: rgba(255, 255, 255, 0); text-decoration: line-through; font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: gray; border-bottom-width: 1px;}");
+        lineEdits.at(index)->setStyleSheet("QLineEdit {color: rgb(160, 160, 160); background-color: rgba(255, 255, 255, 0); text-decoration: line-through; font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: rgb(160, 160, 160); border-bottom-width: 1px;}");
         real_progres += 100;
-        double i = real_progres/progres;
+        double i = real_progres/(number_click - 1);
         ui->progressBar->setValue((int)i);
         ui->progressBar->repaint();
     }
@@ -456,7 +438,7 @@ void MainWindow::on_checkBoxes_clicked()
         else
             lineEdits.at(index)->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
         real_progres -= 100;
-        double i = real_progres/progres;
+        double i = real_progres/(number_click - 1);
         ui->progressBar->setValue((int)i);
         ui->progressBar->repaint();
     }
@@ -467,10 +449,10 @@ void MainWindow::on_checkBoxes_clicked()
 
 void MainWindow::on_btnAddNote_clicked()
 {
-
-    ui->label_3->clear();
     ui->progressBar->setMinimum(0);
     ui->progressBar->setMaximum(100);
+
+    ui->label_3->clear();
     if(number_click < 11)
     {
         if (status_theme == 1)
@@ -479,17 +461,19 @@ void MainWindow::on_btnAddNote_clicked()
             lineEdits.at(number_click-1)->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
         labels.at(number_click-1)->setVisible(false);
         number_click++;
-        if (number_click == 11)
-            return;
+       // if (number_click == 11)
+       //    return;
         progres++;
     }
+    double i = real_progres/(progres);
+    ui->progressBar->setValue((int)i);
+    ui->progressBar->repaint();
     changed = true;
     return;
 }
 
 void MainWindow::on_btnSaveInDB_clicked()
 {
-
     QDate date = ui->calendarWidget->selectedDate();
     QString dateStr = date.toString("yyyy-MM-dd");
     qDebug() << "date " << dateStr;
@@ -521,6 +505,7 @@ void MainWindow::on_btnSaveInDB_clicked()
         }
     }
 
+
     // Удаляем лишние заметки
     for(int i = number_click; i <= 11; i++)
     {
@@ -550,12 +535,10 @@ void MainWindow::on_btnSaveInDB_clicked()
             ui->label_3->setStyleSheet("QLabel {color: rgb(120, 65, 81); background-color: rgba(255, 255, 255, 0); font: italic 8pt \"Montserrat\";}");
 
         ui->label_3->setText(tr("Записи успешно сохранены"));
-        //ui_Note->show();
-        //QMessageBox::information(this, "Сохранено", "Записи успешно сохранены в базе данных.");
         changed = false;
     }
-    //else
-        //QMessageBox::critical(this, "Ошибка", "Произошла ошибка при сохранении записей в базе данных.");
+    else
+        ui->label_3->setText(tr("Произошла ошибка при сохранении записей в базе данных"));
 
 }
 
@@ -567,10 +550,6 @@ void MainWindow::on_btnDeleteFromDB_clicked()
     QString dateStr = date.toString("yyyy-MM-dd");
     qDebug() << "date " << dateStr;
 
-    /*QMessageBox::StandardButton ans = QMessageBox::question(this, "Удаление", QString("Вы уверены, что хотите удалить все записи за %1?\nЗаписи невозможно будет восстановить.").arg(dateStr));
-    if(ans != QMessageBox::Yes)
-        return;*/
-
     // Удаляем все записи за текущую дату
     queryStr = QString(
                 "DELETE FROM notes "
@@ -581,12 +560,11 @@ void MainWindow::on_btnDeleteFromDB_clicked()
             ;
 
     QSqlQuery query(queryStr, db);
-    /*if(!query.exec())
+    if(!query.exec())
     {
-        qDebug() << "Error to delete notes " << query.lastError() << " query " << queryStr;
-        QMessageBox::critical(this, "Ошибка", "Произошла ошибка при удалении записей из базы данных.");
+        ui->label_3->setText(tr("Произошла ошибка при удалении записей из базы данных"));
         return;
-    }*/
+    }
 
     for(int i = 1; i < 11; i++)
     {
@@ -595,24 +573,16 @@ void MainWindow::on_btnDeleteFromDB_clicked()
     number_click = 1;
     progres = 0;
     real_progres = 0;
-    //QMessageBox::information(this, "Успешно", "Записи успешно удалены.");
     changed = false;
-    //ui->label_3->setStyleSheet("QLineEdit {color: white; background-color: rgba(255, 255, 255, 0); font: italic 12pt \"Montserrat\"; border-top-width: 0px;  border-style: solid; border-color: white; border-bottom-width: 1px;}");
     ui->label_3->setText(tr("Записи успешно удалены"));
 }
 
 void MainWindow::on_calendarWidget_selectionChanged()
 {
+    ui->label_3->clear();
     QDate date = ui->calendarWidget->selectedDate();
     QString dateStr = date.toString("yyyy-MM-dd");
     qDebug() << "date " << dateStr;
-
-    /*if(changed)
-    {
-        QMessageBox::StandardButton ans = QMessageBox::question(this, "Переключение", QString("У Вас есть несохраненные данные. Все несохраненные данные будут потеряны. Сохранить данные перед переключением?"));
-        if(ans == QMessageBox::Yes)
-            on_btnSaveInDB_clicked();
-    }*/
 
     for(int i = 1; i < 11; i++)
     {
@@ -727,7 +697,7 @@ void MainWindow::on_themeButton_clicked()
                                        "border-width: 2px;"
                                        "background-color: white;"
                                         "}"
-                                       "QProgressBar::chunk {background-color: rgba(234, 204,215); border-radius: 20px;}");
+                                       "QProgressBar::chunk {background-color: rgba(234, 6, 120); border-radius: 20px;}");
         ui->calendarWidget->setStyleSheet("QToolButton {"
                                           "height: 80px;"
                                           "width: 700px;"
@@ -778,7 +748,7 @@ void MainWindow::on_themeButton_clicked()
                                        "border-width: 2px;"
                                        "background-color: white;"
                                         "}"
-                                       "QProgressBar::chunk {background-color: rgba(224, 185, 203, 255); border-radius: 20px;}");
+                                       "QProgressBar::chunk {background-color: rgb(234, 6, 120); border-radius: 20px;}");
         ui->calendarWidget->setStyleSheet("QToolButton {"
                                           "height: 80px;"
                                           "width: 700px;"

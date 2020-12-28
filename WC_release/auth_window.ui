@@ -130,6 +130,9 @@ border-style: solid;
 border-color: white;
 border-bottom-width: 1px;</string>
    </property>
+   <property name="echoMode">
+    <enum>QLineEdit::Password</enum>
+   </property>
   </widget>
   <widget class="QLabel" name="label_Password">
    <property name="geometry">
