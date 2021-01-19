@@ -201,9 +201,6 @@ border-color: white;
 border-bottom-width: 1px;
 background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:1, stop:0.741573 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));</string>
    </property>
-   <property name="echoMode">
-    <enum>QLineEdit::Password</enum>
-   </property>
   </widget>
   <widget class="QLineEdit" name="nameLineEdit">
    <property name="geometry">
@@ -237,9 +234,6 @@ border-style: solid;
 border-color: white;
 border-bottom-width: 1px;
 background-color: qlineargradient(spread:pad, x1:0.5, y1:0.869318, x2:0.499, y2:1, stop:0.741573 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 0));</string>
-   </property>
-   <property name="echoMode">
-    <enum>QLineEdit::Password</enum>
    </property>
   </widget>
   <widget class="QPushButton" name="registerPushButton">

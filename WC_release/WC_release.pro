@@ -13,16 +13,19 @@ SOURCES += \
     auth_window.cpp \
     main.cpp \
     mainwindow.cpp \
+    note.cpp \
     reg_window.cpp
 
 HEADERS += \
     auth_window.h \
     mainwindow.h \
+    note.h \
     reg_window.h
 
 FORMS += \
     auth_window.ui \
     mainwindow.ui \
+    note.ui \
     reg_window.ui
 
 # Default rules for deployment.
